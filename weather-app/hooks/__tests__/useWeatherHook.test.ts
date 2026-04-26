@@ -1,7 +1,7 @@
 import { Unit } from '@openmeteo/sdk/unit';
 import { renderHook, waitFor } from '@testing-library/react-native';
 import { fetchWeatherApi } from 'openmeteo';
-import { useWeatherHook } from './useWeatherHook';
+import { useWeatherHook } from '../useWeatherHook';
 
 jest.mock('openmeteo');
 

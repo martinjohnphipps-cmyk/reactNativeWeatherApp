@@ -1,5 +1,5 @@
-import { currentWeatherIndex, getDailySummary, getHourlyDataForDay, getWmoDescription } from './weatherUtils';
-import type { VariableData, WeatherData } from '../types/weatherTypes';
+import { currentWeatherIndex, getDailySummary, getHourlyDataForDay, getWmoDescription } from '../weatherUtils';
+import type { VariableData, WeatherData } from '@/types/weatherTypes';
 
 const emptyVar: VariableData = { value: new Float32Array([]), unit: '' };
 

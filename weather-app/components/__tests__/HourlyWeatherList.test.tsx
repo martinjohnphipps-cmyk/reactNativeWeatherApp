@@ -1,7 +1,7 @@
 import { WeatherData } from '@/types/weatherTypes';
 import { render } from '@testing-library/react-native';
 import React from 'react';
-import HourlyWeatherList from './HourlyWeatherList';
+import HourlyWeatherList from '../HourlyWeatherList';
 
 function make168Times(startDate: Date): Date[] {
     return Array.from({ length: 168 }, (_, i) => new Date(startDate.getTime() + i * 3600 * 1000));

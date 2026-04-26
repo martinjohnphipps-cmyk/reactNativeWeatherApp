@@ -1,7 +1,7 @@
 import { DailySummary } from '@/types/weatherTypes';
 import { render, fireEvent } from '@testing-library/react-native';
 import React from 'react';
-import DayCard from './DayCard';
+import DayCard from '../DayCard';
 
 const baseSummary: DailySummary = {
     date: new Date('2026-04-26T00:00:00Z'),

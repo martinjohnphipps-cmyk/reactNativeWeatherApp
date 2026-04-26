@@ -1,5 +1,5 @@
 import { Unit } from '@openmeteo/sdk/unit';
-import { unitDisplayMap, wmoCodeDescriptions } from './openmeteoConstants';
+import { unitDisplayMap, wmoCodeDescriptions } from '../openmeteoConstants';
 
 describe('unitDisplayMap', () => {
     it('maps celsius to °C', () => {

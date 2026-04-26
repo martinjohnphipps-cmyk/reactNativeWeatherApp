@@ -77,6 +77,7 @@ Strict typing throughout — no `any` or `unknown` abuse, all function return ty
 
 - **API access**: the Open-Meteo free tier is suitable for development and small-scale use. Production traffic would require either a commercial Open-Meteo licence or migrating to a paid provider with SLA guarantees. Security considerations around where api keys are stored
 - **State management**: `useState` with prop drilling is appropriate here. A more feature-rich app — multiple screens, saved locations, user preferences — would benefit from React Query for server state and Zustand or Context for shared UI state.
+- **Regions**: If used across different regions allowing metric/imperial unit choice and accounting more richly for multiple timezones
 - **API response caching**: responses could be cached into storage (e.g. AsyncStorage) or React Query to reduce redundant network calls and support basic offline resilience between refreshes.
 - **Component abstraction**: the current components are weather-specific. Extracting generic `Card` and `ScrollList` primitives would improve reuse if the app expanded to cover additional data types or screens.
 
@@ -97,3 +98,6 @@ Strict typing throughout — no `any` or `unknown` abuse, all function return ty
 - **Location search**: a search bar that accepts a place name, resolves it to coordinates via a geocoding API, and passes them into the hook (would be a small extension to take latitude and longitude as props)
 - **Weather icons**: icon set mapped from WMO codes (rain, sun, cloud, snow) with day/night variants driven by the `is_day` field returned by the API
 - **Theming**: dark mode and light mode themes that respond to the device's system setting
+- **App icons**: Add a custom app icon and customise splashscreen icon
+- **Navigation improvements**: Highlight current hour period, scroll back to the top when changing day
+- **Allow selection of different units**: Imperial vs metric selector

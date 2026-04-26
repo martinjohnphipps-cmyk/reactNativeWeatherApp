@@ -1,7 +1,7 @@
 import { WeatherData } from '@/types/weatherTypes';
 import { render, fireEvent } from '@testing-library/react-native';
 import React from 'react';
-import DayCarousel from './DayCarousel';
+import DayCarousel from '../DayCarousel';
 
 function make168Times(startDate: Date): Date[] {
     return Array.from({ length: 168 }, (_, i) => new Date(startDate.getTime() + i * 3600 * 1000));

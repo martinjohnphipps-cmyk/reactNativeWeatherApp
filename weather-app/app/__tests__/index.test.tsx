@@ -2,7 +2,7 @@ import { useWeatherHook } from '@/hooks/useWeatherHook';
 import { WeatherData } from '@/types/weatherTypes';
 import { fireEvent, render } from '@testing-library/react-native';
 import { Alert } from 'react-native';
-import Index from './index';
+import Index from '../index';
 
 jest.mock('@/hooks/useWeatherHook');
 
