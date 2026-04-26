@@ -1,21 +1,18 @@
-import { CurrentTemperature, WeatherData } from "@/types/weatherTypes";
+import { WeatherData } from '@/types/weatherTypes';
 
-export function getLatestTemperature(weatherData: WeatherData): CurrentTemperature | null {
-    let currentTimeIndex = 0;
+export function currentWeatherIndex(weatherData: WeatherData): number | null {
+    if (weatherData.time.length === 0) return null;
 
-    for (let i = 0; i < weatherData.current.time.length; i++) {
-        const time = weatherData.current.time[i];
+    let currentWeatherIndex = 0;
+
+    for (let i = 0; i < weatherData.time.length; i++) {
+        const time = weatherData.time[i];
         if (time < new Date()) {
-            currentTimeIndex = i;
-        }
-        else {
+            currentWeatherIndex = i;
+        } else {
             break;
         }
     }
-  
-    return weatherData.current.temperature_2m?.[currentTimeIndex] ?
-        {
-            time: weatherData.current.time[currentTimeIndex],
-            temperature_2m: weatherData.current.temperature_2m[currentTimeIndex]
-        } : null;
+
+    return currentWeatherIndex;
 }
