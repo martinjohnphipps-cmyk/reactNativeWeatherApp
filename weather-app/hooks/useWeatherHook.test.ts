@@ -159,16 +159,40 @@ describe('useWeatherHook', () => {
         expect(hourly).toHaveLength(11);
     });
 
-    it('keeps currentWeather null and logs error on fetch failure', async () => {
+    it('returns hasError false initially and after successful fetch', async () => {
+        mockFetchWeatherApi.mockResolvedValue([makeMockResponse() as never]);
+        const { result } = renderHook(() => useWeatherHook());
+
+        expect(result.current.hasError).toBe(false);
+
+        await waitFor(() => expect(result.current.currentWeather).not.toBeNull());
+
+        expect(result.current.hasError).toBe(false);
+    });
+
+    it('keeps currentWeather null and sets hasError true on fetch failure', async () => {
         const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
         const error = new Error('Network error');
         mockFetchWeatherApi.mockRejectedValue(error);
 
         const { result } = renderHook(() => useWeatherHook());
 
-        await waitFor(() => expect(consoleSpy).toHaveBeenCalledWith('Error fetching weather data:', error));
+        await waitFor(() => expect(result.current.hasError).toBe(true));
 
         expect(result.current.currentWeather).toBeNull();
+        expect(consoleSpy).toHaveBeenCalledWith('Error fetching weather data:', error);
         consoleSpy.mockRestore();
+    });
+
+    it('calls fetchWeatherApi with retry parameters', async () => {
+        mockFetchWeatherApi.mockResolvedValue([makeMockResponse() as never]);
+        renderHook(() => useWeatherHook());
+
+        await waitFor(() => expect(mockFetchWeatherApi).toHaveBeenCalledTimes(1));
+
+        const [, , retries, backoffFactor, backoffMax] = mockFetchWeatherApi.mock.calls[0];
+        expect(retries).toBe(3);
+        expect(backoffFactor).toBe(0.2);
+        expect(backoffMax).toBe(2);
     });
 });

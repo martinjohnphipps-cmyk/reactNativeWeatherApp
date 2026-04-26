@@ -3,7 +3,7 @@ import { DailySummary } from '@/types/weatherTypes';
 import React from 'react';
 import { Pressable, StyleSheet, Text } from 'react-native';
 
-type Props = {
+type DayCardProps = {
     summary: DailySummary;
     isSelected: boolean;
     isToday: boolean;
@@ -15,7 +15,7 @@ function getDayLabel(date: Date, isToday: boolean): string {
     return date.toLocaleDateString('en-GB', { weekday: 'short' });
 }
 
-export default function DayCard({ summary, isSelected, isToday, onPress }: Props) {
+export default function DayCard({ summary, isSelected, isToday, onPress }: DayCardProps) {
     const dayLabel = getDayLabel(summary.date, isToday);
     const description = getWmoDescription(summary.wmoCode);
 

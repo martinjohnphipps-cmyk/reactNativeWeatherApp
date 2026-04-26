@@ -1,6 +1,7 @@
 import { useWeatherHook } from '@/hooks/useWeatherHook';
 import { WeatherData } from '@/types/weatherTypes';
 import { fireEvent, render } from '@testing-library/react-native';
+import { Alert } from 'react-native';
 import Index from './index';
 
 jest.mock('@/hooks/useWeatherHook');
@@ -82,7 +83,7 @@ describe('Index screen', () => {
     });
 
     it('shows loading indicator when weather data is null', () => {
-        mockUseWeatherHook.mockReturnValue({ currentWeather: null });
+        mockUseWeatherHook.mockReturnValue({ currentWeather: null, hasError: false });
         const { getByText, queryByTestId } = render(<Index />);
 
         expect(getByText('Loading weather…')).toBeTruthy();
@@ -91,7 +92,7 @@ describe('Index screen', () => {
     });
 
     it('shows the location title and subtitle regardless of weather state', () => {
-        mockUseWeatherHook.mockReturnValue({ currentWeather: null });
+        mockUseWeatherHook.mockReturnValue({ currentWeather: null, hasError: false });
         const { getByText } = render(<Index />);
 
         expect(getByText('TES Sheffield Office')).toBeTruthy();
@@ -99,7 +100,7 @@ describe('Index screen', () => {
     });
 
     it('hides loading and shows carousel and hourly list when weather loads', () => {
-        mockUseWeatherHook.mockReturnValue({ currentWeather: makeWeatherData() });
+        mockUseWeatherHook.mockReturnValue({ currentWeather: makeWeatherData(), hasError: false });
         const { queryByText, getByTestId } = render(<Index />);
 
         expect(queryByText('Loading weather…')).toBeNull();
@@ -108,7 +109,7 @@ describe('Index screen', () => {
     });
 
     it('starts with day 0 (today) selected', () => {
-        mockUseWeatherHook.mockReturnValue({ currentWeather: makeWeatherData() });
+        mockUseWeatherHook.mockReturnValue({ currentWeather: makeWeatherData(), hasError: false });
         const { getByTestId } = render(<Index />);
 
         expect(getByTestId('carousel-selected-day').props.children).toBe('0');
@@ -119,7 +120,7 @@ describe('Index screen', () => {
         jest.useFakeTimers();
         jest.setSystemTime(new Date('2025-01-01T00:00:00Z'));
 
-        mockUseWeatherHook.mockReturnValue({ currentWeather: makeWeatherData() });
+        mockUseWeatherHook.mockReturnValue({ currentWeather: makeWeatherData(), hasError: false });
         const { getByTestId } = render(<Index />);
 
         // All times in future → currentWeatherIndex = 0 → initialHourIndex = 0 % 24 = 0
@@ -132,7 +133,7 @@ describe('Index screen', () => {
         // Set time to hour 10 of day 0 (index 10 in the 168-entry array)
         jest.setSystemTime(new Date('2026-04-26T10:30:00Z'));
 
-        mockUseWeatherHook.mockReturnValue({ currentWeather: makeWeatherData() });
+        mockUseWeatherHook.mockReturnValue({ currentWeather: makeWeatherData(), hasError: false });
         const { getByTestId } = render(<Index />);
 
         // currentWeatherIndex = 10, initialHourIndex = 10 % 24 = 10
@@ -144,7 +145,7 @@ describe('Index screen', () => {
         jest.useFakeTimers();
         jest.setSystemTime(new Date('2026-04-26T10:30:00Z'));
 
-        mockUseWeatherHook.mockReturnValue({ currentWeather: makeWeatherData() });
+        mockUseWeatherHook.mockReturnValue({ currentWeather: makeWeatherData(), hasError: false });
         const { getByTestId } = render(<Index />);
 
         fireEvent.press(getByTestId('select-day-3'));
@@ -155,7 +156,7 @@ describe('Index screen', () => {
     });
 
     it('updates selected day when carousel triggers onDaySelect', () => {
-        mockUseWeatherHook.mockReturnValue({ currentWeather: makeWeatherData() });
+        mockUseWeatherHook.mockReturnValue({ currentWeather: makeWeatherData(), hasError: false });
         const { getByTestId } = render(<Index />);
 
         expect(getByTestId('carousel-selected-day').props.children).toBe('0');
@@ -167,12 +168,26 @@ describe('Index screen', () => {
     });
 
     it('resets to day 0 when today card is pressed again', () => {
-        mockUseWeatherHook.mockReturnValue({ currentWeather: makeWeatherData() });
+        mockUseWeatherHook.mockReturnValue({ currentWeather: makeWeatherData(), hasError: false });
         const { getByTestId } = render(<Index />);
 
         fireEvent.press(getByTestId('select-day-3'));
         fireEvent.press(getByTestId('select-day-0'));
 
         expect(getByTestId('prop-day-index').props.children).toBe('0');
+    });
+
+    it('shows an alert and hides loading spinner when hasError is true', () => {
+        const alertSpy = jest.spyOn(Alert, 'alert').mockImplementation(() => {});
+        mockUseWeatherHook.mockReturnValue({ currentWeather: null, hasError: true });
+        const { queryByText, queryByTestId } = render(<Index />);
+
+        expect(alertSpy).toHaveBeenCalledWith(
+            'Error',
+            'An error occurred when attempting to fetch weather data, please try again later.',
+        );
+        expect(queryByText('Loading weather…')).toBeNull();
+        expect(queryByTestId('mock-day-carousel')).toBeNull();
+        alertSpy.mockRestore();
     });
 });

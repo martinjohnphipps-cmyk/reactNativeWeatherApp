@@ -3,7 +3,7 @@ import { getHourlyDataForDay, getWmoDescription } from '@/utils/weatherUtils';
 import React, { useMemo } from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 
-type Props = {
+type HourlyWeatherListProps = {
     weatherData: WeatherData;
     dayIndex: number;
     initialHourIndex: number;
@@ -30,7 +30,7 @@ function HourlyRow({ entry }: { entry: HourlyEntry }) {
     );
 }
 
-export default function HourlyWeatherList({ weatherData, dayIndex, initialHourIndex }: Props) {
+export default function HourlyWeatherList({ weatherData, dayIndex, initialHourIndex }: HourlyWeatherListProps) {
     const hours: HourlyEntry[] = useMemo(() => getHourlyDataForDay(weatherData, dayIndex), [weatherData, dayIndex]);
 
     // Clamp so FlatList can always render items below the initial index

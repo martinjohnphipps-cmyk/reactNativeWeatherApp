@@ -8,13 +8,13 @@ const CARD_WIDTH = 100;
 const CARD_MARGIN = 6;
 const SNAP_INTERVAL = CARD_WIDTH + CARD_MARGIN * 2;
 
-type Props = {
+type DayCarouselProps = {
     weatherData: WeatherData;
     selectedDay: number;
     onDaySelect: (index: number) => void;
 };
 
-export default function DayCarousel({ weatherData, selectedDay, onDaySelect }: Props) {
+export default function DayCarousel({ weatherData, selectedDay, onDaySelect }: DayCarouselProps) {
     const summaries: DailySummary[] = useMemo(
         () => Array.from({ length: 7 }, (_, i) => getDailySummary(weatherData, i)),
         [weatherData],

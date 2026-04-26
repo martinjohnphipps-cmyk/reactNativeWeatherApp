@@ -3,9 +3,14 @@ import { VariableData, WeatherData } from '@/types/weatherTypes';
 import { fetchWeatherApi } from 'openmeteo';
 import { useEffect, useState } from 'react';
 
+const FETCH_RETRIES = 3;
+const FETCH_BACKOFF_FACTOR = 0.2;
+const FETCH_BACKOFF_MAX = 2;
+
 export function useWeatherHook() {
     const url = 'https://api.open-meteo.com/v1/forecast';
     const [currentWeather, setCurrentWeather] = useState<WeatherData | null>(null);
+    const [hasError, setHasError] = useState(false);
 
     useEffect(() => {
         const params = {
@@ -28,8 +33,7 @@ export function useWeatherHook() {
             forecast_days: 7,
         };
 
-        // Fetch weather api takes retry params etc. for if it failed - could be good to add
-        fetchWeatherApi(url, params)
+        fetchWeatherApi(url, params, FETCH_RETRIES, FETCH_BACKOFF_FACTOR, FETCH_BACKOFF_MAX)
             .then((responses) => {
                 const response = responses[0];
                 const hourly = response.hourly()!;
@@ -62,10 +66,10 @@ export function useWeatherHook() {
                 setCurrentWeather(weatherData);
             })
             .catch((error) => {
-                // Add better error handling, say in UI that it has errored
                 console.error('Error fetching weather data:', error);
+                setHasError(true);
             });
     }, []);
 
-    return { currentWeather };
+    return { currentWeather, hasError };
 }
