@@ -1,19 +1,7 @@
+import { unitDisplayMap } from '@/constants/openmeteoConstants';
 import { VariableData, WeatherData } from '@/types/weatherTypes';
-import { Unit } from '@openmeteo/sdk/unit';
 import { fetchWeatherApi } from 'openmeteo';
 import { useEffect, useState } from 'react';
-
-const unitDisplayMap: Partial<Record<Unit, string>> = {
-    [Unit.celsius]: '°C',
-    [Unit.fahrenheit]: '°F',
-    [Unit.millimetre]: 'mm',
-    [Unit.centimetre]: 'cm',
-    [Unit.percentage]: '%',
-    [Unit.kilometres_per_hour]: 'km/h',
-    [Unit.metre_per_second]: 'm/s',
-    [Unit.wmo_code]: 'wmo',
-    [Unit.dimensionless_integer]: '',
-};
 
 export function useWeatherHook() {
     const url = 'https://api.open-meteo.com/v1/forecast';

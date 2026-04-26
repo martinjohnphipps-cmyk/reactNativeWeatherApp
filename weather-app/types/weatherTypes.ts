@@ -18,7 +18,21 @@ export type WeatherData = {
     is_day: VariableData;
 };
 
-export type CurrentTemperature = {
+export type HourlyEntry = {
     time: Date;
-    temperature_2m: number | null;
+    temperature_2m: number;
+    apparent_temperature: number;
+    cloud_cover: number;
+    wind_speed_10m: number;
+    precipitation: number;
+    precipitation_probability: number;
+    weather_code: number;
+    is_day: number;
+};
+
+export type DailySummary = {
+    date: Date;
+    minTemp: number;
+    maxTemp: number;
+    wmoCode: number;
 };
