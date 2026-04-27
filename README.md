@@ -71,6 +71,9 @@ The screen is split into `DayCard`, `DayCarousel`, and `HourlyWeatherList`. Each
 **TypeScript**
 Strict typing throughout — no `any` or `unknown` abuse, all function return types are explicit, and prop interfaces are declared for every component.
 
+**Conventional git commits**
+[Conventional git commits](https://www.conventionalcommits.org/en/v1.0.0/#summary) when committing code so changes made are understandable, in work repositories extra detail for each commit would be added when appropriate two lines beneath the conventional commit message header in optional body
+
 ---
 
 ## Scalability Thoughts
@@ -79,6 +82,11 @@ Strict typing throughout — no `any` or `unknown` abuse, all function return ty
 - **State management**: `useState` with prop drilling is appropriate here. A more feature-rich app — multiple screens, saved locations, user preferences — would benefit from React Query for server state and Zustand or Context for shared UI state.
 - **Regions**: If used across different regions allowing metric/imperial unit choice and accounting more richly for multiple timezones
 - **API response caching**: responses could be cached into storage (e.g. AsyncStorage) or React Query to reduce redundant network calls and support basic offline resilience between refreshes.
+- **Publishing to stores**: for a real world production app it would be made available for users to download via Play Store and App Store for Android users and iOS users respectively to easily download, with consiiderations made around if this is a B2B app that should be made available to organisation's work stores or publicly available
+- **App versioning strategy**: I would decide on an app versioning strategy, e.g. Semantic (Major.Minor.Patch)
+- **Require update logic**: consider adding logic to alert users that the app needs to be updated when breaking changes are required e.g. app now needs to call a new API endpoint as the current one is no longer licenced for our use
+- **CI/CD**: I would add build pipelines to automate the building of the app's apk and ipa files, including running unit tests, security and quality control tools like SonarQube and Mend (Whitesource), as well as allowing to optionally build the app in debug mode as this may be required for any QA automation tools, or in production mode for release (standard), and whether it should be published to any testing tracks on Play Store or Testflight for iOS testing
+- **End to end and integration tests**: I would add end to end and integration tests to improve the testing suite from just unit test coverage
 - **Component abstraction**: the current components are weather-specific. Extracting generic `Card` and `ScrollList` primitives would improve reuse if the app expanded to cover additional data types or screens.
 
 ---
@@ -101,3 +109,6 @@ Strict typing throughout — no `any` or `unknown` abuse, all function return ty
 - **App icons**: Add a custom app icon and customise splashscreen icon
 - **Navigation improvements**: Highlight current hour period, scroll back to the top when changing day
 - **Allow selection of different units**: Imperial vs metric selector
+- **Accessibility**: Ensure accessibility of the app, testing with screen reader, updating the code where needed to meet WCAG 2.2
+- **Cross platform and more extensive testing**: I would verify on devices where possible (if not through greater emulator testing) the functionality of the app across a variety of devices and screen sizes, tablets, Android and iOS (I just tested on Android physical device for this task due to only owning an Android and Windows PC)
+- **Tablet functionality**: I would validate if the tablet scaling was acceptable or if changes are needed to how the app appears on a tablet
